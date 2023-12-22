@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingCustomerApi.Data;
 
@@ -10,9 +11,11 @@ using ShoppingCustomerApi.Data;
 namespace ShoppingCustomerApi.Migrations
 {
     [DbContext(typeof(CusomerDbContext))]
-    partial class CusomerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231222130228_addnewuser")]
+    partial class addnewuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -23,6 +23,20 @@ namespace ShoppingCustomerApi.Data {
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Addresses> Addresses { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Customer>().HasData(new Customer
+            {
+                CustomerID = 1,
+                CustomerName = "Antony",
+                Email = "anto@gmail.com",
+                Password = "abce",
+                PhoneNumber = "9874526965",
+            });
+        }
     }
 }
 

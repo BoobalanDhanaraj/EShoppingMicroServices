@@ -10,7 +10,7 @@ namespace ShoppingCustomerApi
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<CustomerDto, Customer>().ReverseMap();
+                config.CreateMap<CustomerLoginDto, Customer>().ReverseMap();
                 config.CreateMap<AddressesDto, Addresses>().ReverseMap();
             });
             return mappingConfig;

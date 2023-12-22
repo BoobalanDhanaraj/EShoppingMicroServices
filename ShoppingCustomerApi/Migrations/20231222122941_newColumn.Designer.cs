@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingCustomerApi.Data;
 
@@ -10,9 +11,11 @@ using ShoppingCustomerApi.Data;
 namespace ShoppingCustomerApi.Migrations
 {
     [DbContext(typeof(CusomerDbContext))]
-    partial class CusomerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231222122941_newColumn")]
+    partial class newColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,16 +97,6 @@ namespace ShoppingCustomerApi.Migrations
                     b.HasKey("CustomerID");
 
                     b.ToTable("Customers");
-
-                    b.HasData(
-                        new
-                        {
-                            CustomerID = 1,
-                            CustomerName = "Antony",
-                            Email = "anto@gmail.com",
-                            Password = "abce",
-                            PhoneNumber = "9874526965"
-                        });
                 });
 
             modelBuilder.Entity("ShoppingCustomerApi.Model.Addresses", b =>

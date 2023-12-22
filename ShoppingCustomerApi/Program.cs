@@ -1,16 +1,26 @@
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCustomerApi;
 using ShoppingCustomerApi.Data;
-using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+//AutoMapper
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
+
+
 
 // Add services to the container.
 builder.Services.AddDbContext<CusomerDbContext>(options =>

@@ -18,5 +18,7 @@ namespace ShoppingCustomerApi.Model
         public string ZipCode { get; set; }
         public string Country { get; set; }
 
+        public Customer Customer { get; set; }
+
     }
 }

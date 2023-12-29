@@ -1,4 +1,6 @@
-﻿namespace ShoppingCustomerApi.Model.Dto
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ShoppingCustomerApi.Model.Dto
 {
     public class CustomerSignUpDto
     {

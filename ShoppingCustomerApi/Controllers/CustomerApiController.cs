@@ -163,8 +163,14 @@ namespace ShoppingCustomerApi.Controllers
                 return "Invalid signup data. Please provide valid data.";
             }
 
-            // Add additional validation rules if needed
-            // For example, check for valid email format, password strength, etc.
+            // Check for email and phone number format errors
+            foreach (var validationError in ModelState.Values.SelectMany(v => v.Errors))
+            {
+                if (!string.IsNullOrEmpty(validationError.ErrorMessage))
+                {
+                    return validationError.ErrorMessage;
+                }
+            }
 
             return string.Empty; // No validation issues
         }

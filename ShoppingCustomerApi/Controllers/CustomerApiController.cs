@@ -100,5 +100,80 @@ namespace ShoppingCustomerApi.Controllers
             return customer.Password == enteredPassword;
         }
 
+        //Signup
+        [HttpPost("signup")]
+        public async Task<IActionResult> SignUp([FromBody] CustomerSignUpDto signUpDto)
+        {
+            var response = new ResponseDto();
+            try
+            {
+                // Validate the input data
+                var validationMessage = ValidateSignUpInput(signUpDto);
+                if (!string.IsNullOrEmpty(validationMessage))
+                {
+                    response.IsSuccess = false;
+                    response.Message = validationMessage;
+                    return BadRequest(response);
+                }
+
+                // Check if the email is already in use
+                if (await IsEmailInUseAsync(signUpDto.Email))
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Email is already in use. Please use a different email.";
+                    return BadRequest(response);
+                }
+
+                // Create a new customer entity
+                var newCustomer = new Customer
+                {
+                    CustomerName = signUpDto.CustomerName,
+                    Email = signUpDto.Email,
+                    Password = signUpDto.Password, // You should hash the password before storing it
+                    PhoneNumber = signUpDto.PhoneNumber,
+                    // Other properties...
+                };
+
+                // Add the new customer to the database
+                _db.Customers.Add(newCustomer);
+                await _db.SaveChangesAsync();
+
+                // Map the customer entity to a DTO if needed
+                var customerResponseDto = _mapper.Map<CustomerLoginDto>(newCustomer);
+
+                // Set the success response for successful signup
+                response.Result = customerResponseDto;
+                response.Message = "Signup successful";
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Internal Server Error";
+            }
+
+            return Ok(response);
+        }
+
+        // Validation for signup input
+        private string ValidateSignUpInput(CustomerSignUpDto signUpDto)
+        {
+            if (signUpDto == null)
+            {
+                return "Invalid signup data. Please provide valid data.";
+            }
+
+            // Add additional validation rules if needed
+            // For example, check for valid email format, password strength, etc.
+
+            return string.Empty; // No validation issues
+        }
+
+        // Check if the email is already in use
+        private async Task<bool> IsEmailInUseAsync(string email)
+        {
+            return await _db.Customers.AnyAsync(c => c.Email == email);
+        }
+
     }
 }

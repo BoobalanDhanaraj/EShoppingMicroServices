@@ -9,6 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+//Adding CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+        });
+});
+
 // Add services to the container.
 builder.Services.AddDbContext<CusomerDbContext>(options =>
 {
@@ -36,6 +49,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseCors("AllowAll");
 
 app.MapControllers();
 

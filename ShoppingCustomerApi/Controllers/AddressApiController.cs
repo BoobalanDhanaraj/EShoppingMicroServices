@@ -15,7 +15,7 @@ namespace ShoppingCustomerApi.Controllers
         {
             _db = db;
         }
-        [HttpPost]
+        [HttpPost("AddAddress")]
         public IActionResult AddAddress([FromBody] AddressesDto addressDto)
         {
             var response = new ResponseDto();
@@ -47,6 +47,40 @@ namespace ShoppingCustomerApi.Controllers
                 // Log the exception or handle it appropriately
                 response.IsSuccess = false;
                 response.Message = "Failed to add address";
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("{customerId}")]
+        public IActionResult GetAddresses(int customerId)
+        {
+            var response = new ResponseDto();
+
+            try
+            {
+                // Retrieve addresses for the given customer ID
+                var addresses = _db.Addresses
+                    .Where(a => a.CustomerID == customerId)
+                    .ToList();
+
+                if (addresses.Count == 0)
+                {
+                    // If the customer doesn't have any addresses, set Result to null
+                    response.Result = null;
+                    response.Message = "Customer has no addresses stored.";
+                }
+                else
+                {
+                    response.Result = addresses;
+                    response.Message = "Addresses retrieved successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Failed to retrieve addresses";
             }
 
             return Ok(response);

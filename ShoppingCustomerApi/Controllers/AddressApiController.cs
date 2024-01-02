@@ -15,7 +15,7 @@ namespace ShoppingCustomerApi.Controllers
         {
             _db = db;
         }
-        [HttpPost("AddAddress")]
+        [HttpPost("addAddress")]
         public IActionResult AddAddress([FromBody] AddressesDto addressDto)
         {
             var response = new ResponseDto();
@@ -52,7 +52,7 @@ namespace ShoppingCustomerApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{customerId}")]
+        [HttpGet("viewAddress")]
         public IActionResult GetAddresses(int customerId)
         {
             var response = new ResponseDto();
@@ -86,7 +86,7 @@ namespace ShoppingCustomerApi.Controllers
             return Ok(response);
         }
 
-        [HttpPut("{addressId}")]
+        [HttpPut("editAddress")]
         public IActionResult EditAddress(int addressId, [FromBody] AddressesDto updatedAddressDto)
         {
             var response = new ResponseDto();
@@ -124,6 +124,40 @@ namespace ShoppingCustomerApi.Controllers
                 // Log the exception or handle it appropriately
                 response.IsSuccess = false;
                 response.Message = "Failed to update address";
+            }
+
+            return Ok(response);
+        }
+
+        [HttpDelete("deleteAddress")]
+        public IActionResult DeleteAddress(int addressId)
+        {
+            var response = new ResponseDto();
+
+            try
+            {
+                // Retrieve the address to be deleted
+                var addressToDelete = _db.Addresses.SingleOrDefault(a => a.AddressID == addressId);
+
+                if (addressToDelete != null)
+                {
+                    // Remove the address from the database
+                    _db.Addresses.Remove(addressToDelete);
+                    _db.SaveChanges();
+
+                    response.Message = "Address deleted successfully";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Address not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Failed to delete address";
             }
 
             return Ok(response);

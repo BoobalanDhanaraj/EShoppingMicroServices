@@ -85,5 +85,48 @@ namespace ShoppingCustomerApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpPut("{addressId}")]
+        public IActionResult EditAddress(int addressId, [FromBody] AddressesDto updatedAddressDto)
+        {
+            var response = new ResponseDto();
+
+            try
+            {
+                // Retrieve the existing address details
+                var addressToUpdate = _db.Addresses.SingleOrDefault(a => a.AddressID == addressId);
+
+                if (addressToUpdate != null)
+                {
+                    // Update only the provided details
+                    addressToUpdate.AddressType = updatedAddressDto.AddressType ?? addressToUpdate.AddressType;
+                    addressToUpdate.DoorNo = updatedAddressDto.DoorNo ?? addressToUpdate.DoorNo;
+                    addressToUpdate.StreetAddress = updatedAddressDto.StreetAddress ?? addressToUpdate.StreetAddress;
+                    addressToUpdate.City = updatedAddressDto.City ?? addressToUpdate.City;
+                    addressToUpdate.State = updatedAddressDto.State ?? addressToUpdate.State;
+                    addressToUpdate.ZipCode = updatedAddressDto.ZipCode ?? addressToUpdate.ZipCode;
+                    addressToUpdate.Country = updatedAddressDto.Country ?? addressToUpdate.Country;
+
+                    // Save changes to the database
+                    _db.SaveChanges();
+
+                    response.Result = addressToUpdate;
+                    response.Message = "Address updated successfully";
+                }
+                else
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Address not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Failed to update address";
+            }
+
+            return Ok(response);
+        }
     }
 }

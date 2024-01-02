@@ -13,7 +13,6 @@ namespace ShoppingProductApi.Model
         public string CategoryName { get; set; }
 
         // Navigation properties
-        public List<Product> Products { get; set; }
         public List<Subcategory> Subcategories { get; set; }
     }
 }

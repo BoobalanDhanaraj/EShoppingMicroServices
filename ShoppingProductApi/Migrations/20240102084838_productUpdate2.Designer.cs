@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingProductApi.Data;
 
@@ -10,9 +11,11 @@ using ShoppingProductApi.Data;
 namespace ShoppingProductApi.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    partial class ProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240102084838_productUpdate2")]
+    partial class productUpdate2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,11 +207,13 @@ namespace ShoppingProductApi.Migrations
 
             modelBuilder.Entity("ShoppingProductApi.Model.ProductImages", b =>
                 {
-                    b.HasOne("ShoppingProductApi.Model.Product", null)
-                        .WithMany("ProductImages")
+                    b.HasOne("ShoppingProductApi.Model.Product", "Product")
+                        .WithMany()
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ShoppingProductApi.Model.Subcategory", b =>
@@ -225,11 +230,6 @@ namespace ShoppingProductApi.Migrations
             modelBuilder.Entity("ShoppingProductApi.Model.Category", b =>
                 {
                     b.Navigation("Subcategories");
-                });
-
-            modelBuilder.Entity("ShoppingProductApi.Model.Product", b =>
-                {
-                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("ShoppingProductApi.Model.Seller", b =>

@@ -67,8 +67,9 @@ namespace ShoppingProductApi.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StockQuantity = table.Column<int>(type: "int", nullable: false),
-                    CategoryID = table.Column<int>(type: "int", nullable: false),
-                    SellerID = table.Column<int>(type: "int", nullable: false)
+                    SubcategoryID = table.Column<int>(type: "int", nullable: false),
+                    SellerID = table.Column<int>(type: "int", nullable: false),
+                    CategoryID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,13 +78,18 @@ namespace ShoppingProductApi.Migrations
                         name: "FK_Products_Categories_CategoryID",
                         column: x => x.CategoryID,
                         principalTable: "Categories",
-                        principalColumn: "CategoryID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CategoryID");
                     table.ForeignKey(
                         name: "FK_Products_Sellers_SellerID",
                         column: x => x.SellerID,
                         principalTable: "Sellers",
                         principalColumn: "SellerID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Subcategories_SubcategoryID",
+                        column: x => x.SubcategoryID,
+                        principalTable: "Subcategories",
+                        principalColumn: "SubCategoryID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -118,14 +124,14 @@ namespace ShoppingProductApi.Migrations
                 values: new object[] { 1, "murali@gmail.com", "9786542875", "Muralidharan" });
 
             migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "ProductID", "CategoryID", "Name", "Price", "SellerID", "StockQuantity" },
-                values: new object[] { 1, 1, "Realme 11 Pro", 0m, 1, 25 });
-
-            migrationBuilder.InsertData(
                 table: "Subcategories",
                 columns: new[] { "SubCategoryID", "CategoryID", "SubCategoryName" },
                 values: new object[] { 1, 1, "Mobile" });
+
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ProductID", "CategoryID", "Name", "Price", "SellerID", "StockQuantity", "SubcategoryID" },
+                values: new object[] { 1, null, "Realme 11 Pro", 0m, 1, 25, 1 });
 
             migrationBuilder.InsertData(
                 table: "ProductImages",
@@ -148,6 +154,11 @@ namespace ShoppingProductApi.Migrations
                 column: "SellerID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Products_SubcategoryID",
+                table: "Products",
+                column: "SubcategoryID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subcategories_CategoryID",
                 table: "Subcategories",
                 column: "CategoryID");
@@ -160,16 +171,16 @@ namespace ShoppingProductApi.Migrations
                 name: "ProductImages");
 
             migrationBuilder.DropTable(
-                name: "Subcategories");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Sellers");
 
             migrationBuilder.DropTable(
-                name: "Sellers");
+                name: "Subcategories");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

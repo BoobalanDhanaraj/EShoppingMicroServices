@@ -17,14 +17,15 @@ namespace ShoppingProductApi.Model
 
         public int StockQuantity { get; set; }
 
-        [ForeignKey("Category")]
-        public int CategoryID { get; set; }
+        [ForeignKey("Subcategory")]
+        public int SubcategoryID { get; set; }
 
         [ForeignKey("Seller")]
         public int SellerID { get; set; }
 
         // Navigation properties
-        public Category Category { get; set; }
+        public Subcategory Subcategory { get; set; }
         public Seller Seller { get; set; }
+        public ProductImages ProductImages { get; set; }
     }
 }

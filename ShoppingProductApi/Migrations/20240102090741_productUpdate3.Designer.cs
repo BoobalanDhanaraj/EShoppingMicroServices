@@ -11,8 +11,8 @@ using ShoppingProductApi.Data;
 namespace ShoppingProductApi.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    [Migration("20240102054817_initial")]
-    partial class initial
+    [Migration("20240102090741_productUpdate3")]
+    partial class productUpdate3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -56,9 +56,6 @@ namespace ShoppingProductApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"));
 
-                    b.Property<int>("CategoryID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -72,11 +69,14 @@ namespace ShoppingProductApi.Migrations
                     b.Property<int>("StockQuantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubcategoryID")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductID");
 
-                    b.HasIndex("CategoryID");
-
                     b.HasIndex("SellerID");
+
+                    b.HasIndex("SubcategoryID");
 
                     b.ToTable("Products");
 
@@ -84,11 +84,11 @@ namespace ShoppingProductApi.Migrations
                         new
                         {
                             ProductID = 1,
-                            CategoryID = 1,
                             Name = "Realme 11 Pro",
                             Price = 0m,
                             SellerID = 1,
-                            StockQuantity = 25
+                            StockQuantity = 25,
+                            SubcategoryID = 1
                         });
                 });
 
@@ -188,32 +188,30 @@ namespace ShoppingProductApi.Migrations
 
             modelBuilder.Entity("ShoppingProductApi.Model.Product", b =>
                 {
-                    b.HasOne("ShoppingProductApi.Model.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("ShoppingProductApi.Model.Seller", "Seller")
                         .WithMany("Products")
                         .HasForeignKey("SellerID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.HasOne("ShoppingProductApi.Model.Subcategory", "Subcategory")
+                        .WithMany()
+                        .HasForeignKey("SubcategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Seller");
+
+                    b.Navigation("Subcategory");
                 });
 
             modelBuilder.Entity("ShoppingProductApi.Model.ProductImages", b =>
                 {
-                    b.HasOne("ShoppingProductApi.Model.Product", "Product")
-                        .WithMany()
+                    b.HasOne("ShoppingProductApi.Model.Product", null)
+                        .WithMany("ProductImages")
                         .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ShoppingProductApi.Model.Subcategory", b =>
@@ -229,9 +227,12 @@ namespace ShoppingProductApi.Migrations
 
             modelBuilder.Entity("ShoppingProductApi.Model.Category", b =>
                 {
-                    b.Navigation("Products");
-
                     b.Navigation("Subcategories");
+                });
+
+            modelBuilder.Entity("ShoppingProductApi.Model.Product", b =>
+                {
+                    b.Navigation("ProductImages");
                 });
 
             modelBuilder.Entity("ShoppingProductApi.Model.Seller", b =>

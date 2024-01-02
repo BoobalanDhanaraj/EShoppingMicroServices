@@ -34,11 +34,11 @@ namespace ShoppingProductApi.Data
 
             modelBuilder.Entity<Product>().HasData(new Product
             {
-                ProductID= 1,
-                Name="Realme 11 Pro",
-                StockQuantity=25,
-                SellerID=1,
-                CategoryID=1,
+                ProductID = 1,
+                Name = "Realme 11 Pro",
+                StockQuantity = 25,
+                SellerID = 1,
+                SubcategoryID = 1,
             });
             modelBuilder.Entity<Seller>().HasData(new Seller
             {

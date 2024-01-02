@@ -12,10 +12,7 @@ namespace ShoppingProductApi.Model
 
         [ForeignKey("Product")]
         public int ProductID { get; set; }
-
+        [Required]
         public string ImageURLs { get; set; }
-
-        // Navigation property
-        public Product Product { get; set; }
     }
 }

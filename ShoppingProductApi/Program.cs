@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ShoppingProductApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

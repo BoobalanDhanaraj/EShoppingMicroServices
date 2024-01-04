@@ -34,7 +34,7 @@ namespace ShoppingProductApi.Controllers
                     .Select(p => new ProductDto
                     {
                         ProductID = p.ProductID,
-                        ProductImages = p.ProductImages.Select(pi => pi.ImageURLs).ToList(), // Adjust here
+                        ProductImages = p.ProductImages.Select(pi => pi.ImageURLs).ToList(), 
                         Name = p.Name,
                         Price = p.Price,
                         StockQuantity = p.StockQuantity,
@@ -151,6 +151,56 @@ namespace ShoppingProductApi.Controllers
                 // Log the exception or handle it appropriately
                 response.IsSuccess = false;
                 response.Message = "Failed to update product";
+            }
+
+            return Ok(response);
+        }
+
+        [HttpGet("GetProductDetails")]
+        public IActionResult GetProductDetails(int productId)
+        {
+            var response = new ResponseDto();
+
+            try
+            {
+                // Find the product by ID
+                var product = _db.Products
+                                    .Include(p => p.Subcategory)
+                                    .ThenInclude(s => s.Category)
+                                    .Include(p => p.Seller)
+                                    .FirstOrDefault(p => p.ProductID == productId);
+
+                if (product == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Product not found";
+                    return NotFound(response);
+                }
+
+                // Map the product entity to a DTO if needed
+                var productDto = new ProductDto
+                {
+                    ProductID = product.ProductID,
+                    ProductImages = product.ProductImages?.Select(pi => pi.ImageURLs).ToList(),
+                    Name = product.Name,
+                    Price = product.Price,
+                    StockQuantity = product.StockQuantity,
+                    Category = product.Subcategory?.Category?.CategoryName,
+                    Subcategory = product.Subcategory?.SubCategoryName,
+                    Seller = product.Seller?.SellerName
+                };
+
+
+
+                response.Result = productDto;
+                response.Message = "Product details retrieved successfully";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex}");
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Failed to retrieve product details";
             }
 
             return Ok(response);

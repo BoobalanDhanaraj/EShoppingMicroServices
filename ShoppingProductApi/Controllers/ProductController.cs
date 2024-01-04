@@ -168,6 +168,7 @@ namespace ShoppingProductApi.Controllers
                                     .Include(p => p.Subcategory)
                                     .ThenInclude(s => s.Category)
                                     .Include(p => p.Seller)
+                                    .Include(p => p.ProductImages)
                                     .FirstOrDefault(p => p.ProductID == productId);
 
                 if (product == null)

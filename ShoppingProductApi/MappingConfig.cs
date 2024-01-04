@@ -11,6 +11,7 @@ namespace ShoppingProductApi
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<ProductDto, Product>().ReverseMap();
+                config.CreateMap<AddProductDto, Product>().ReverseMap();
             });
             return mappingConfig;
         }

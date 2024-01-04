@@ -26,6 +26,6 @@ namespace ShoppingProductApi.Model
         // Navigation properties
         public Subcategory Subcategory { get; set; }
         public Seller Seller { get; set; }
-        public ProductImages ProductImages { get; set; }
+        public List<ProductImages> ProductImages { get; set; }
     }
 }

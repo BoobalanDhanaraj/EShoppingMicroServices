@@ -7,8 +7,8 @@
         public string Name { get; set; }
         public decimal Price { get; set; }
         public int StockQuantity { get; set; }
-        public string CategoryName { get; set; }
-        public string SubcategoryName { get; set; }
-        public string SellerName { get; set; }
+        public string Category { get; set; }
+        public string Subcategory { get; set; }
+        public string Seller { get; set; }
     }
 }

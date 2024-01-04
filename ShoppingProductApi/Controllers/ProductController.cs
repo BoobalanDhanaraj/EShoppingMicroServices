@@ -57,7 +57,7 @@ namespace ShoppingProductApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("AddProduct")]
         public IActionResult AddProduct([FromBody] AddProductDto newProductDto)
         {
             var response = new ResponseDto();
@@ -118,6 +118,42 @@ namespace ShoppingProductApi.Controllers
             return Ok(response);
         }
 
+        [HttpPut("EditProduct")]
+        public IActionResult EditProduct(int productId, [FromBody] EditProductDto editProductDto)
+        {
+            var response = new ResponseDto();
 
+            try
+            {
+                // Find the product by ID
+                var existingProduct = _db.Products.Find(productId);
+
+                if (existingProduct == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Product not found";
+                    return NotFound(response);
+                }
+
+                // Update the product properties
+                existingProduct.Name = editProductDto.Name ?? existingProduct.Name;
+                existingProduct.Price = editProductDto.Price > 0 ? editProductDto.Price : existingProduct.Price;
+                existingProduct.StockQuantity = editProductDto.StockQuantity >= 0 ? editProductDto.StockQuantity : existingProduct.StockQuantity;
+
+                // Save changes to the database
+                _db.SaveChanges();
+
+                response.Result = existingProduct;
+                response.Message = "Product updated successfully";
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Failed to update product";
+            }
+
+            return Ok(response);
+        }
     }
 }

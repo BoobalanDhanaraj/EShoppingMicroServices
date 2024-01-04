@@ -205,5 +205,39 @@ namespace ShoppingProductApi.Controllers
 
             return Ok(response);
         }
+
+        [HttpDelete("DeleteProduct")]
+        public IActionResult DeleteProduct(int productId)
+        {
+            var response = new ResponseDto();
+
+            try
+            {
+                // Find the product by ID
+                var product = _db.Products.Find(productId);
+
+                // Check if the product exists
+                if (product == null)
+                {
+                    response.IsSuccess = false;
+                    response.Message = "Product not found";
+                    return NotFound(response); // Return 404 Not Found with responseDto
+                }
+
+                // Remove the product from the database
+                _db.Products.Remove(product);
+                _db.SaveChanges();
+
+                response.Message = "Product deleted successfully";
+                return Ok(response); // Return 200 OK with responseDto
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it appropriately
+                response.IsSuccess = false;
+                response.Message = "Internal Server Error";
+                return StatusCode(500, response); // Return 500 Internal Server Error with responseDto
+            }
+        }
     }
 }

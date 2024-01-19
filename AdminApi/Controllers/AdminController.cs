@@ -1,4 +1,5 @@
 ﻿using AdminApi.Data;
+using AdminApi.Model;
 using AdminApi.Model.Dto;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -47,9 +48,10 @@ namespace AdminApi.Controllers
 
             return Ok(new ResponseDto
             {
+                Result = loginDto,
                 IsSuccess = true,
                 Message = "Login successful."
-            });
+            }); ;
         }
 
         private bool ValidateAdminCredentials(string email, string password)

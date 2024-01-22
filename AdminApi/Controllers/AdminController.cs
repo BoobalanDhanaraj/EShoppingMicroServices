@@ -33,7 +33,7 @@ namespace AdminApi.Controllers
             }
 
             // Validate admin credentials against the database
-            var isValid = ValidateAdminCredentials(loginDto.Email, loginDto.Password);
+            var (isValid, username) = ValidateAdminCredentials(loginDto.Email, loginDto.Password);
 
             if (!isValid)
             {
@@ -44,24 +44,48 @@ namespace AdminApi.Controllers
                 });
             }
 
+            // Retrieve the username from the database based on the provided email
+            string retrievedUsername = GetUsernameByEmail(loginDto.Email);
+
             // You may want to generate a session token or use other authentication mechanisms
 
             return Ok(new ResponseDto
             {
-                Result = loginDto,
+                Result = new { Email = loginDto.Email, Username = retrievedUsername },
                 IsSuccess = true,
                 Message = "Login successful."
-            }); ;
+            });
         }
 
-        private bool ValidateAdminCredentials(string email, string password)
+        // Validate admin credentials method
+        private (bool, string) ValidateAdminCredentials(string email, string password)
         {
-            // Implement logic to validate admin credentials against your database
+            // Implement logic to validate admin credentials against database
             // For example, query your database to check if the email and password match an admin account
-            // Return true if valid, false otherwise
+            // Return a tuple of (isValid, username)
 
             var admin = _db.Admins.FirstOrDefault(a => a.Email == email && a.Password == password);
-            return admin != null;
+
+            if (admin != null)
+            {
+                // Valid credentials, return true and the username
+                return (true, admin.UserName);
+            }
+            else
+            {
+                // Invalid credentials, return false and an empty string for the username
+                return (false, string.Empty);
+            }
+        }
+
+        // Method to retrieve the username from the database based on email
+        private string GetUsernameByEmail(string email)
+        {
+            // Implement your database query logic here
+            var admin = _db.Admins.FirstOrDefault(a => a.Email == email);
+
+            // Check if the admin was found and return the username, or return an empty string if not found
+            return admin != null ? admin.UserName : string.Empty;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ShoppingProductApi.Controllers
             _db = db;
         }
 
-        [HttpPost]
+        [HttpPost("AddSubcategory")]
         public IActionResult AddSubcategory([FromBody] SubCategoryDto subcategoryDto)
         {
             var response = new ResponseDto();
@@ -48,7 +48,7 @@ namespace ShoppingProductApi.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpGet("AllSubcategories")]
         public IActionResult GetAllSubcategories()
         {
             var response = new ResponseDto();
@@ -79,7 +79,7 @@ namespace ShoppingProductApi.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteSubcategory")]
         public IActionResult DeleteSubcategory(int id)
         {
             var response = new ResponseDto();

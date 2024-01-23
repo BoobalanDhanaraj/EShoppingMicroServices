@@ -9,7 +9,7 @@ namespace ShoppingProductApi.Controllers
     [Route("api/subcategories")]
     public class SubcategoriesController : ControllerBase
     {
-        private readonly ProductDbContext _db; // Replace YourDbContext with the actual name of your DbContext
+        private readonly ProductDbContext _db; 
 
         public SubcategoriesController(ProductDbContext db)
         {

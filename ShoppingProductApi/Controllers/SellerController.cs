@@ -22,12 +22,12 @@ namespace ShoppingProductApi.Controllers
         [HttpPost("AddSeller")]
         public IActionResult AddSeller([FromBody] SellerDto sellerDto)
         {
-            if (sellerDto == null)
+            if (sellerDto == null || string.IsNullOrEmpty(sellerDto.SellerName) || string.IsNullOrEmpty(sellerDto.Email) || string.IsNullOrEmpty(sellerDto.PhoneNumber))
             {
                 return BadRequest(new ResponseDto
                 {
                     IsSuccess = false,
-                    Message = "Invalid input data."
+                    Message = "Invalid input data. SellerName, Email, and PhoneNumber are required."
                 });
             }
 

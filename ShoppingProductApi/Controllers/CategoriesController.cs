@@ -53,10 +53,17 @@ namespace ShoppingProductApi.Controllers
 
             try
             {
-                // Retrieve all categories from the database
-                var categories = _db.Categories.ToList();
+                // Retrieve all categories from the database along with names of associated sub-categories
+                var categoriesWithSubcategoryNames = _db.Categories
+                    .Select(category => new
+                    {
+                        category.CategoryID,
+                        category.CategoryName,
+                        SubcategoryNames = category.Subcategories.Select(subcategory => subcategory.SubCategoryName).ToList()
+                    })
+                    .ToList();
 
-                response.Result = categories;
+                response.Result = categoriesWithSubcategoryNames;
                 response.Message = "Categories retrieved successfully";
                 return Ok(response);
             }
@@ -68,6 +75,7 @@ namespace ShoppingProductApi.Controllers
                 return StatusCode(500, response);
             }
         }
+
 
         [HttpDelete("DeleteCategory")]
         public IActionResult RemoveCategory(int categoryId)

@@ -59,7 +59,13 @@ namespace ShoppingProductApi.Controllers
                     {
                         category.CategoryID,
                         category.CategoryName,
-                        SubcategoryNames = category.Subcategories.Select(subcategory => subcategory.SubCategoryName).ToList()
+                        Subcategories = category.Subcategories
+                        .Select(subcategory => new
+                        {
+                            subcategory.SubCategoryID,
+                            subcategory.SubCategoryName
+                        })
+                        .ToList()
                     })
                     .ToList();
 

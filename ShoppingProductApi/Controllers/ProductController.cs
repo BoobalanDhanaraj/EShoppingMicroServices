@@ -95,10 +95,12 @@ namespace ShoppingProductApi.Controllers
                 // Add image URLs to the ProductImages table
                 if (newProductDto.ProductImageUrl != null && newProductDto.ProductImageUrl.Any())
                 {
-                    var productImages = newProductDto.ProductImageUrl.Select(url => new ProductImages
+                    var urls = newProductDto.ProductImageUrl.Split(',');  // Assuming URLs are separated by a comma
+
+                    var productImages = urls.Select(url => new ProductImages
                     {
                         ProductID = newProduct.ProductID,
-                        ImageURLs = url.ToString()
+                        ImageURLs = url.Trim()  // Trim to remove leading/trailing whitespaces
                     }).ToList();
 
                     _db.ProductImages.AddRange(productImages);
